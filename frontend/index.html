@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sealed Fortune — a confidential game on Zama FHEVM</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="hero">
+  <p class="eyebrow">Zama Developer Program · Season 5 — Confidential Gaming</p>
+  <h1>🔒 Sealed Fortune</h1>
+  <p class="tagline">Guess the hidden number. Nobody can see it — not the host, not other players, not anyone reading the chain — until reveal.</p>
+  <p class="tagline small">On a transparent chain this game is impossible. With Zama FHEVM, the winning number and every guess stay encrypted while the game is played.</p>
+  <div class="cta-row">
+    <button id="startRoundBtn" class="btn primary">Start a round (demo)</button>
+    <button id="connectBtn" class="btn">Connect wallet — Sepolia</button>
+  </div>
+  <p id="walletLabel" class="muted">Demo mode needs no wallet. Sepolia mode needs MetaMask + a deployed contract.</p>
+</header>
+
+<main>
+  <section class="card">
+    <h2>How it works</h2>
+    <ol class="steps">
+      <li><strong>Start a round.</strong> The winning number (1–100) is drawn on-chain, encrypted — an <code>euint32</code> that nobody can read.</li>
+      <li><strong>Seal your guess.</strong> Your number is encrypted in your browser and sent as <code>externalEuint32</code>. One guess per player per round.</li>
+      <li><strong>Win / lose is computed encrypted.</strong> The contract runs <code>FHE.eq(guess, secret)</code> — it never sees a plaintext guess or secret.</li>
+      <li><strong>Reveal.</strong> After the deadline, <code>revealRound()</code> makes the secret publicly decryptable — and only then can anyone see the winning number and the winners.</li>
+    </ol>
+  </section>
+
+  <section class="card">
+    <h2>Play now — demo mode</h2>
+    <p class="muted">Demo simulates the on-chain game in this tab so you can play immediately. The winning number is hidden in this page until you press Reveal — <strong>this is a simulation, not real FHE</strong>. Real confidentiality happens only in the Solidity contract on Sepolia.</p>
+    <p><strong id="demoRoundLabel">No round yet</strong> · Winning number: <strong id="demoSecret">—</strong></p>
+    <div class="play-row">
+      <label>Your guess (1–100)
+        <input id="guessInput" type="number" min="1" max="100" value="42">
+      </label>
+      <button id="sealGuessBtn" class="btn primary">🔒 Seal my guess</button>
+      <button id="revealBtn" class="btn">👁 Reveal round</button>
+    </div>
+    <div id="demoPlayers"><p class="muted">No round yet. Press “Start a round”.</p></div>
+    <p id="status" class="status">Press “Start a round” to begin.</p>
+  </section>
+
+  <section class="card">
+    <h2>Why it only works with FHE</h2>
+    <p>On a normal blockchain every number is public. A hidden-number game would be broken before it starts: players could copy the winning number, and the host could change it after seeing the guesses. Here the secret is fixed at round creation, encrypted, and the comparison happens while everything is still encrypted. The host cannot change it, players cannot copy it, and the chain never learns it.</p>
+    <p class="muted">What stays encrypted: the winning number (<code>euint32</code>), every guess (<code>euint32</code>), every win flag (<code>ebool</code>). What is public: that a round exists, who played, and — only after reveal — the winning number and winners.</p>
+  </section>
+
+  <section class="card hidden" id="sepoliaPanel">
+    <h2>Play on Sepolia (real FHE)</h2>
+    <p>Contract: <code id="contractLabel">not deployed yet — set CONTRACT_ADDRESS in config.js</code></p>
+    <div class="play-row">
+      <button id="sepoliaPlayBtn" class="btn primary">Seal a guess on Sepolia</button>
+      <button id="sepoliaRevealBtn" class="btn">Reveal on Sepolia</button>
+    </div>
+    <p class="muted">Your guess is encrypted with the <code>@zama-fhe/relayer-sdk</code> in your browser, then sent to <code>play()</code> as an encrypted handle + proof. After <code>revealRound()</code>, the Relayer publicly decrypts the secret and win flags.</p>
+  </section>
+
+  <section class="card">
+    <h2>For judges &amp; builders</h2>
+    <ul>
+      <li><strong>Confidentiality:</strong> the game only works because the data is encrypted — see <code>contracts/SealedFortune.sol</code> comments.</li>
+      <li><strong>Fun:</strong> one number, one sealed guess, a reveal moment — easy to understand, replayable every round.</li>
+      <li><strong>Playability &amp; UX:</strong> demo mode plays with no wallet; Sepolia mode is connect → seal → reveal.</li>
+      <li><strong>Onboarding:</strong> README has local run + Sepolia deploy steps. No paid services, no secrets in the repo.</li>
+    </ul>
+    <p>Repo: <code>github.com/DrVerny/zama-confidential-game</code> (to be pushed) · Deadline: Dec 14, 2026, 11:59 PM UTC · Prize pool: $50,000 in cUSDT (Zama Season 5 page).</p>
+  </section>
+</main>
+
+<footer><p>Built by Moshood Sodiq Olasunkanmi (DrVerny) for Zama Developer Program Season 5. Testnet game — no real money, no prizes escrowed in the contract.</p></footer>
+
+<script src="config.js"></script>
+<script src="abi.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
