@@ -1,10 +1,10 @@
 # 🔒 Sealed Fortune — a confidential game on Zama FHEVM
 
-**Zama Developer Program · Season 5 — Confidential Gaming**
+**Zama Developer Program · Season 5  Confidential Gaming**
 Built by Moshood Sodiq Olasunkanmi ([@verrnny](https://x.com/verrnny) / [DrVerny](https://github.com/DrVerny))
 
 **Deadline:** December 14, 2026, 23:59 AOE · **Prize pool:** 5,000 cUSDT total
-(1st 2,500, 2nd 1,500, 3rd 1,000 — per Zama's official Season 5 page and
+(1st 2,500, 2nd 1,500, 3rd 1,000  per Zama's official Season 5 page and
 submission form at https://forms.zama.org/zama-developer-program-mainnet-season-5-confidential-gaming.
 An earlier draft of this README quoted $50,000 from the Season 5 page's
 first version; the current official page/form say 5,000 cUSDT total.)
