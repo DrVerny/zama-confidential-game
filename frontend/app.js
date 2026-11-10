@@ -1,9 +1,9 @@
-/* Sealed Fortune — demo + Sepolia frontend logic.
+/* Sealed Fortune - demo + Sepolia frontend logic.
  *
  * DEMO MODE (default, no wallet needed):
  * The winning number is generated in this browser tab and kept
  * in a JS variable that is never shown on screen until reveal.
- * That is a *simulation* of the on-chain game — it lets anyone
+ * That is a *simulation* of the on-chain game - it lets anyone
  * play immediately. It is NOT FHE: the real confidentiality
  * happens only in the Solidity contract on Sepolia, where the
  * secret is an euint32 that nobody can read before reveal.
@@ -16,7 +16,7 @@
  * @zama-fhe/relayer-sdk, sent as externalEuint32 + inputProof
  * to play(), and after revealRound() the secret / win flags are
  * publicly decrypted with the Relayer SDK. See sepoliaPlay()
- * and sepoliaReveal() — they are wired to the contract ABI in
+ * and sepoliaReveal() - they are wired to the contract ABI in
  * abi.js and fail loudly (not silently) if the contract is not
  * deployed yet.
  */
@@ -32,7 +32,7 @@ const $ = (id) => document.getElementById(id);
 const demoNames = ["Ada", "Chidi", "Fatima", "Tunde", "Zainab"];
 
 function fakeCiphertext(n) {
-  // A visual stand-in for a ciphertext handle — NOT real encryption.
+  // A visual stand-in for a ciphertext handle - NOT real encryption.
   let h = 0;
   const s = "sealed:" + n + ":" + Math.random();
   for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
@@ -55,7 +55,7 @@ function startDemoRound() {
     });
   });
   renderDemo();
-  setStatus("Round " + demoRound + " open — the winning number is sealed. Nobody can see it, not even you.");
+  setStatus("Round " + demoRound + " open - the winning number is sealed. Nobody can see it, not even you.");
 }
 
 function sealDemoGuess() {
@@ -66,12 +66,12 @@ function sealDemoGuess() {
     return;
   }
   if (demo.players.some((p) => p.name === "You")) {
-    setStatus("You already sealed a guess this round — one guess per player, like on-chain.");
+    setStatus("You already sealed a guess this round - one guess per player, like on-chain.");
     return;
   }
   demo.players.push({ name: "You", guess: value, sealed: true });
   renderDemo();
-  setStatus("Your guess is sealed 🔒 — it is hidden until reveal. (Demo: simulated sealing, see note.)");
+  setStatus("Your guess is sealed 🔒 - it is hidden until reveal. (Demo: simulated sealing, see note.)");
 }
 
 function revealDemo() {
@@ -82,23 +82,23 @@ function revealDemo() {
   const winners = demo.players.filter((p) => p.guess === demo.secret);
   setStatus(
     winners.length
-      ? "🎉 Winning number was " + demo.secret + " — winner" + (winners.length > 1 ? "s" : "") + ": " + winners.map((w) => w.name).join(", ") + "!"
-      : "Winning number was " + demo.secret + " — no winner this round. Start a new round and try again."
+      ? "🎉 Winning number was " + demo.secret + " - winner" + (winners.length > 1 ? "s" : "") + ": " + winners.map((w) => w.name).join(", ") + "!"
+      : "Winning number was " + demo.secret + " - no winner this round. Start a new round and try again."
   );
 }
 
 function renderDemo() {
   const box = $("demoPlayers");
-  if (!demo) { box.innerHTML = "<p class='muted'>No round yet. Press “Start a round”.</p>"; $("demoSecret").textContent = "—"; return; }
+  if (!demo) { box.innerHTML = "<p class='muted'>No round yet. Press “Start a round”.</p>"; $("demoSecret").textContent = "-"; return; }
   $("demoSecret").textContent = demo.revealed ? String(demo.secret) : "🔒 sealed";
-  $("demoRoundLabel").textContent = "Round " + demoRound + (demo.revealed ? " — revealed" : " — open");
+  $("demoRoundLabel").textContent = "Round " + demoRound + (demo.revealed ? " - revealed" : " - open");
   box.innerHTML = demo.players.map((p) => {
     const won = demo.revealed && p.guess === demo.secret;
     const shown = demo.revealed ? String(p.guess) : fakeCiphertext(p.guess);
     return `<div class="player ${won ? "winner" : ""}">
       <strong>${p.name}</strong>
       <span>${demo.revealed ? "guess: " + shown : "sealed: " + shown}</span>
-      <span>${demo.revealed ? (won ? "🏆 WINNER" : "—") : "🔒 hidden"}</span>
+      <span>${demo.revealed ? (won ? "🏆 WINNER" : "-") : "🔒 hidden"}</span>
     </div>`;
   }).join("");
 }
@@ -136,14 +136,14 @@ function shortAddr(a) { return a ? a.slice(0, 6) + "…" + a.slice(-4) : ""; }
 
 function friendlyError(e) {
   const msg = (e && (e.shortMessage || e.reason || e.message)) || String(e);
-  if (/user rejected|User denied|ACTION_REJECTED|4001/i.test(msg)) return "Transaction rejected in your wallet — nothing was sent.";
-  if (/Already played/i.test(msg)) return "You already sealed a guess in this round — one guess per player.";
-  if (/Round is closed/i.test(msg)) return "This round is closed — its deadline passed. Start a new round on Sepolia.";
+  if (/user rejected|User denied|ACTION_REJECTED|4001/i.test(msg)) return "Transaction rejected in your wallet - nothing was sent.";
+  if (/Already played/i.test(msg)) return "You already sealed a guess in this round - one guess per player.";
+  if (/Round is closed/i.test(msg)) return "This round is closed - its deadline passed. Start a new round on Sepolia.";
   if (/Round already revealed/i.test(msg)) return "This round was already revealed.";
-  if (/Too early to reveal/i.test(msg)) return "Too early to reveal — wait until the round deadline.";
-  if (/Round does not exist/i.test(msg)) return "That round does not exist yet — start a round on Sepolia first.";
-  if (/insufficient funds/i.test(msg)) return "Not enough Sepolia test ETH for gas — top up from a Sepolia faucet.";
-  if (/network|chain|wrong chain/i.test(msg)) return "Wrong network — switch your wallet to Sepolia (chain 11155111). " + msg;
+  if (/Too early to reveal/i.test(msg)) return "Too early to reveal - wait until the round deadline.";
+  if (/Round does not exist/i.test(msg)) return "That round does not exist yet - start a round on Sepolia first.";
+  if (/insufficient funds/i.test(msg)) return "Not enough Sepolia test ETH for gas - top up from a Sepolia faucet.";
+  if (/network|chain|wrong chain/i.test(msg)) return "Wrong network - switch your wallet to Sepolia (chain 11155111). " + msg;
   return msg.length > 200 ? msg.slice(0, 200) + "…" : msg;
 }
 
@@ -169,8 +169,8 @@ async function ensureChain() {
 }
 
 async function connectWallet() {
-  if (!window.ethereum) { setStatus("No wallet found — install MetaMask or Rabby in your browser, then try again."); return; }
-  if (!window.ethers) { setStatus("ethers library failed to load — reload the page (vendor/ethers.umd.min.js must be served with the page)."); return; }
+  if (!window.ethereum) { setStatus("No wallet found - install MetaMask or Rabby in your browser, then try again."); return; }
+  if (!window.ethers) { setStatus("ethers library failed to load - reload the page (vendor/ethers.umd.min.js must be served with the page)."); return; }
   if (!CFG.CONTRACT_ADDRESS) {
     setStatus("Sepolia is not wired up yet: deploy the contract first, then paste its address into frontend/config.js (see README).");
     return;
@@ -200,7 +200,7 @@ async function getRelayerInstance() {
   try {
     sdk = await import("./vendor/relayer-sdk-js.js");
   } catch (e) {
-    throw new Error("Relayer SDK failed to load — vendor/relayer-sdk-js.js (and its .wasm files) must be served with the page. " + (e.message || e));
+    throw new Error("Relayer SDK failed to load - vendor/relayer-sdk-js.js (and its .wasm files) must be served with the page. " + (e.message || e));
   }
   await sdk.initSDK();
   sepolia.instance = await sdk.createInstance({
@@ -221,7 +221,7 @@ async function refreshSepolia() {
       $("sepoliaRoundLabel").textContent = "No round on Sepolia yet";
       $("sepoliaInfo").textContent = "Press “Start a round on Sepolia” to open round 0.";
       $("sepoliaResult").textContent = "";
-      setSepoliaStatus("No round yet — start one on Sepolia.");
+      setSepoliaStatus("No round yet - start one on Sepolia.");
       return;
     }
     sepoliaRoundId = Number(nextId - 1n);
@@ -232,15 +232,15 @@ async function refreshSepolia() {
     const now = Date.now();
     const open = !r.revealed && now < Number(r.revealAfter) * 1000;
     $("sepoliaRoundLabel").textContent =
-      "Round " + sepoliaRoundId + (r.revealed ? " — revealed" : open ? " — open" : " — closed, awaiting reveal");
+      "Round " + sepoliaRoundId + (r.revealed ? " - revealed" : open ? " - open" : " - closed, awaiting reveal");
     $("sepoliaInfo").textContent =
       "Players: " + r.playerCount + " · Reveal after: " + revealAfter.toLocaleString() +
       (r.revealed ? " · already revealed" : open ? " · you " + (played ? "already played" : "have not played yet") : " · deadline passed, ready to reveal") +
       " · Players so far: " + players.map(shortAddr).join(", ");
     setSepoliaStatus(
-      r.revealed ? "Round revealed — press “Reveal on Sepolia” to decrypt the result."
-      : open ? (played ? "Your guess is sealed 🔒 — wait for the reveal." : "Round is open — seal your guess (1–100) above.")
-      : "Deadline passed — anyone can reveal this round now."
+      r.revealed ? "Round revealed - press “Reveal on Sepolia” to decrypt the result."
+      : open ? (played ? "Your guess is sealed 🔒 - wait for the reveal." : "Round is open - seal your guess (1-100) above.")
+      : "Deadline passed - anyone can reveal this round now."
     );
   } catch (e) {
     setSepoliaStatus("Could not read the round from Sepolia: " + friendlyError(e));
@@ -251,11 +251,11 @@ async function startSepoliaRound() {
   const s = requireSepolia();
   if (!s) return;
   try {
-    setSepoliaStatus("Starting a round on Sepolia — confirm in your wallet…");
+    setSepoliaStatus("Starting a round on Sepolia - confirm in your wallet…");
     const tx = await s.contract.startRound();
-    setSepoliaStatus("Round tx sent: " + tx.hash + " — waiting for confirmation…");
+    setSepoliaStatus("Round tx sent: " + tx.hash + " - waiting for confirmation…");
     await tx.wait();
-    setSepoliaStatus("Round started ✅ — tx " + tx.hash);
+    setSepoliaStatus("Round started ✅ - tx " + tx.hash);
     $("sepoliaResult").innerHTML = 'Round tx: <a href="' + txLink(tx.hash) + '" target="_blank" rel="noopener">' + tx.hash + "</a>";
     await refreshSepolia();
   } catch (e) {
@@ -273,12 +273,12 @@ async function sepoliaPlay() {
   }
   try {
     await refreshSepolia();
-    if (sepoliaRoundId === null) { setSepoliaStatus("No round on Sepolia yet — start one first."); return; }
+    if (sepoliaRoundId === null) { setSepoliaStatus("No round on Sepolia yet - start one first."); return; }
     const r = await s.contract.rounds(sepoliaRoundId);
-    if (r.revealed) { setSepoliaStatus("Round " + sepoliaRoundId + " was already revealed — start a new round."); return; }
-    if (Date.now() >= Number(r.revealAfter) * 1000) { setSepoliaStatus("Round " + sepoliaRoundId + " is closed — its deadline passed. Start a new round."); return; }
+    if (r.revealed) { setSepoliaStatus("Round " + sepoliaRoundId + " was already revealed - start a new round."); return; }
+    if (Date.now() >= Number(r.revealAfter) * 1000) { setSepoliaStatus("Round " + sepoliaRoundId + " is closed - its deadline passed. Start a new round."); return; }
     if (await s.contract.hasPlayed(sepoliaRoundId, s.account)) {
-      setSepoliaStatus("You already sealed a guess in round " + sepoliaRoundId + " — one guess per player.");
+      setSepoliaStatus("You already sealed a guess in round " + sepoliaRoundId + " - one guess per player.");
       return;
     }
     const instance = await getRelayerInstance();
@@ -286,13 +286,13 @@ async function sepoliaPlay() {
     const input = instance.createEncryptedInput(CFG.CONTRACT_ADDRESS, s.account);
     input.add32(value);
     const { handles, inputProof } = await input.encrypt();
-    setSepoliaStatus("Guess encrypted 🔒 — sending to the contract. Confirm in your wallet…");
+    setSepoliaStatus("Guess encrypted 🔒 - sending to the contract. Confirm in your wallet…");
     const tx = await s.contract.play(sepoliaRoundId, handles[0], inputProof);
-    setSepoliaStatus("Guess tx sent: " + tx.hash + " — waiting for confirmation…");
+    setSepoliaStatus("Guess tx sent: " + tx.hash + " - waiting for confirmation…");
     const receipt = await tx.wait();
     if (receipt.status !== 1n && receipt.status !== 1) throw new Error("Transaction failed on-chain (status 0).");
-    $("sepoliaResult").innerHTML = 'Guess sealed ✅ — tx: <a href="' + txLink(tx.hash) + '" target="_blank" rel="noopener">' + tx.hash + "</a>";
-    setSepoliaStatus("Your guess is sealed on Sepolia 🔒 — nobody can see it until reveal. (Round " + sepoliaRoundId + ")");
+    $("sepoliaResult").innerHTML = 'Guess sealed ✅ - tx: <a href="' + txLink(tx.hash) + '" target="_blank" rel="noopener">' + tx.hash + "</a>";
+    setSepoliaStatus("Your guess is sealed on Sepolia 🔒 - nobody can see it until reveal. (Round " + sepoliaRoundId + ")");
     await refreshSepolia();
   } catch (e) {
     setSepoliaStatus("Could not seal your guess: " + friendlyError(e));
@@ -308,12 +308,12 @@ async function sepoliaReveal() {
     const r = await s.contract.rounds(sepoliaRoundId);
     if (!r.revealed) {
       if (Date.now() < Number(r.revealAfter) * 1000) {
-        setSepoliaStatus("Too early to reveal — round " + sepoliaRoundId + " reveals after " + new Date(Number(r.revealAfter) * 1000).toLocaleString() + ".");
+        setSepoliaStatus("Too early to reveal - round " + sepoliaRoundId + " reveals after " + new Date(Number(r.revealAfter) * 1000).toLocaleString() + ".");
         return;
       }
-      setSepoliaStatus("Revealing round " + sepoliaRoundId + " on-chain — confirm in your wallet…");
+      setSepoliaStatus("Revealing round " + sepoliaRoundId + " on-chain - confirm in your wallet…");
       const tx = await s.contract.revealRound(sepoliaRoundId);
-      setSepoliaStatus("Reveal tx sent: " + tx.hash + " — waiting for confirmation…");
+      setSepoliaStatus("Reveal tx sent: " + tx.hash + " - waiting for confirmation…");
       await tx.wait();
       $("sepoliaResult").innerHTML = 'Reveal tx: <a href="' + txLink(tx.hash) + '" target="_blank" rel="noopener">' + tx.hash + "</a>";
     }
@@ -338,7 +338,7 @@ async function sepoliaReveal() {
     const lines = players.map((p, i) => {
       const g = clearValues[guessHandles[i].toLowerCase()] ?? clearValues[guessHandles[i]];
       const w = clearValues[flagHandles[i].toLowerCase()] ?? clearValues[flagHandles[i]];
-      return shortAddr(p) + ": guess " + String(g) + (w === true ? " 🏆 WINNER" : " —");
+      return shortAddr(p) + ": guess " + String(g) + (w === true ? " 🏆 WINNER" : " -");
     });
     const winners = players.filter((_, i) => {
       const w = clearValues[flagHandles[i].toLowerCase()] ?? clearValues[flagHandles[i]];
@@ -349,7 +349,7 @@ async function sepoliaReveal() {
       lines.join("<br>") +
       (winners.length ? "<br>Winners: " + winners.map(shortAddr).join(", ") : "<br>No winner this round.");
     setSepoliaStatus(
-      "Round " + sepoliaRoundId + " revealed — winning number " + String(secret) +
+      "Round " + sepoliaRoundId + " revealed - winning number " + String(secret) +
       (winners.length ? ", winner(s): " + winners.map(shortAddr).join(", ") : ", no winner.") + "."
     );
     await refreshSepolia();
@@ -368,8 +368,8 @@ document.addEventListener("DOMContentLoaded", () => {
   $("sepoliaRefreshBtn").addEventListener("click", refreshSepolia);
   $("sepoliaStartBtn").addEventListener("click", startSepoliaRound);
   if (window.ethereum) {
-    window.ethereum.on("accountsChanged", () => { sepolia = null; setSepoliaStatus("Wallet account changed — connect again."); });
-    window.ethereum.on("chainChanged", () => { sepolia = null; setSepoliaStatus("Network changed — connect again on Sepolia."); });
+    window.ethereum.on("accountsChanged", () => { sepolia = null; setSepoliaStatus("Wallet account changed - connect again."); });
+    window.ethereum.on("chainChanged", () => { sepolia = null; setSepoliaStatus("Network changed - connect again on Sepolia."); });
   }
   renderDemo();
 });

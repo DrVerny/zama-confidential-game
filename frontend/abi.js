@@ -1,4 +1,4 @@
-// SealedFortune contract ABI — only the functions the frontend needs.
+// SealedFortune contract ABI - only the functions the frontend needs.
 // Generated from contracts/SealedFortune.sol. Keep in sync after any
 // contract change (re-run: npx hardhat compile, then copy the ABI).
 window.SEALED_FORTUNE_ABI = [

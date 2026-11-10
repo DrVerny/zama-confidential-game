@@ -1,4 +1,4 @@
-// Sealed Fortune — frontend config.
+// Sealed Fortune - frontend config.
 // Fill these in AFTER deploying to Sepolia (see README.md).
 // Nothing secret belongs in this file.
 window.SEALED_FORTUNE_CONFIG = {
@@ -9,7 +9,7 @@ window.SEALED_FORTUNE_CONFIG = {
   // Zama Sepolia Relayer used by @zama-fhe/relayer-sdk.
   // The SDK's own SepoliaConfig carries this URL (and the Sepolia
   // ACL/KMS/verifier addresses); this is a human-readable note only.
-  // See https://docs.zama.ai — update if the docs change the URL.
+  // See https://docs.zama.ai - update if the docs change the URL.
   RELAYER_URL: "https://relayer.testnet.zama.org",
   MIN_NUMBER: 1,
   MAX_NUMBER: 100,
