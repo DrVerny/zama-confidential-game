@@ -6,9 +6,11 @@ window.SEALED_FORTUNE_CONFIG = {
   CONTRACT_ADDRESS: "0x30AB08cC0840768F7a186e1E10824d1c78dD7844",
   // Sepolia chain id.
   CHAIN_ID: 11155111,
-  // Zama Sepolia Relayer / gateway used by @zama-fhe/relayer-sdk.
+  // Zama Sepolia Relayer used by @zama-fhe/relayer-sdk.
+  // The SDK's own SepoliaConfig carries this URL (and the Sepolia
+  // ACL/KMS/verifier addresses); this is a human-readable note only.
   // See https://docs.zama.ai — update if the docs change the URL.
-  RELAYER_URL: "https://relayer.testnet.zama.cloud",
+  RELAYER_URL: "https://relayer.testnet.zama.org",
   MIN_NUMBER: 1,
   MAX_NUMBER: 100,
 };
