@@ -4,9 +4,9 @@ pragma solidity ^0.8.24;
 import {FHE, euint32, ebool, externalEuint32} from "@fhevm/solidity/lib/FHE.sol";
 import {ZamaEthereumConfig} from "@fhevm/solidity/config/ZamaConfig.sol";
 
-/// @title Sealed Fortune — Hidden Number / Mystery Box
+/// @title Sealed Fortune - Hidden Number / Mystery Box
 /// @author Moshood Sodiq Olasunkanmi (@verrnny / DrVerny)
-/// @notice Zama Developer Program Season 5 — Confidential Gaming.
+/// @notice Zama Developer Program Season 5 - Confidential Gaming.
 ///         A complete, playable game whose core mechanic ONLY works
 ///         because the game state stays encrypted with FHEVM.
 ///
@@ -14,8 +14,8 @@ import {ZamaEthereumConfig} from "@fhevm/solidity/config/ZamaConfig.sol";
 /// ----------------------------------------------
 /// 1. The winning number (1-100) is generated ON-CHAIN with
 ///    FHE.randEuint32() and stored as an `euint32`. It is NEVER
-///    stored, emitted, or logged as plaintext. Nobody — not the
-///    host, not other players, not anyone reading the chain —
+///    stored, emitted, or logged as plaintext. Nobody - not the
+///    host, not other players, not anyone reading the chain -
 ///    can see it while the round is open.
 /// 2. Every player's guess is submitted as an `externalEuint32`
 ///    (encrypted in the player's browser with the Relayer SDK)
@@ -23,13 +23,13 @@ import {ZamaEthereumConfig} from "@fhevm/solidity/config/ZamaConfig.sol";
 ///    as an `euint32`. Nobody can see any guess before reveal.
 /// 3. Win / lose is computed ON ENCRYPTED DATA, inside the
 ///    contract, with FHE.eq(guess, secret). The result is an
-///    `ebool` — still encrypted. The contract never branches on
+///    `ebool` - still encrypted. The contract never branches on
 ///    a plaintext guess or secret, so no information leaks
 ///    through gas, events, or return values.
 /// 4. ONLY at reveal time does the host call revealRound().
 ///    That calls FHE.makePubliclyDecryptable() on the secret
-///    (and on each stored win flag). After that — and only
-///    after that — anyone can decrypt the winning number and
+///    (and on each stored win flag). After that - and only
+///    after that - anyone can decrypt the winning number and
 ///    the winners through the Zama Relayer. Before reveal,
 ///    public decryption is impossible.
 ///
@@ -45,11 +45,11 @@ import {ZamaEthereumConfig} from "@fhevm/solidity/config/ZamaConfig.sol";
 ///
 /// HOW A ROUND PLAYS
 /// -----------------
-/// 1. Anyone calls startRound() — a new round opens for
+/// 1. Anyone calls startRound() - a new round opens for
 ///    `ROUND_DURATION` (default 1 day, overridable per round).
 /// 2. Each player calls play(roundId, encryptedGuess, proof)
 ///    ONCE per round, with a number 1-100. Their guess is a
-///    sealed "mystery box" — picking a box is picking a number.
+///    sealed "mystery box" - picking a box is picking a number.
 /// 3. After the deadline anyone calls revealRound(roundId).
 ///    The secret and the win flags become publicly decryptable.
 /// 4. The frontend decrypts them with the Relayer SDK and
