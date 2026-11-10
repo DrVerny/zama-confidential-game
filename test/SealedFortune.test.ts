@@ -12,7 +12,7 @@ import { FhevmType } from "@fhevm/hardhat-plugin";
  *
  * What is tested here is the GAME LOGIC around the encryption:
  * one guess per player, no play after reveal, no reveal early,
- * and — the important one — a correct guess wins and a wrong
+ * and - the important one - a correct guess wins and a wrong
  * guess loses, computed on encrypted values.
  */
 describe("SealedFortune", function () {
@@ -71,7 +71,7 @@ describe("SealedFortune", function () {
     await expect(game.revealRound(0)).to.emit(game, "RoundRevealed");
     const round = await game.rounds(0);
     expect(round.revealed).to.equal(true);
-    // The secret is still only a ciphertext handle on-chain —
+    // The secret is still only a ciphertext handle on-chain -
     // the test never learns the plaintext winning number here.
     expect(await game.getSecret(0)).to.not.equal(ethers.ZeroHash);
   });
